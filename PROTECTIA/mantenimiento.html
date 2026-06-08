@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProtectA Escolar — En Mantenimiento</title>
+  <meta name="description" content="Esta sección de ProtectA Escolar está temporalmente en mantenimiento. Vuelve pronto." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* ── Maintenance Page ─────────────────────────────────────────── */
+    .mant-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .mant-card {
+      max-width: 540px;
+      width: 100%;
+      text-align: center;
+      padding: 56px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Glow ring decoration */
+    .mant-card::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(0,212,255,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── Icon ─────────────────────────────────────────────────────── */
+    .mant-icon-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .mant-icon-ring {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: rgba(0,212,255,0.07);
+      border: 2px solid rgba(0,212,255,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+      animation: pulse-ring 3s ease-in-out infinite;
+      box-shadow: 0 0 32px rgba(0,212,255,0.15);
+    }
+
+    @keyframes pulse-ring {
+      0%, 100% { box-shadow: 0 0 24px rgba(0,212,255,0.12); }
+      50%       { box-shadow: 0 0 48px rgba(0,212,255,0.28), 0 0 80px rgba(0,212,255,0.08); }
+    }
+
+    /* Floating gear badge */
+    .mant-badge {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      border: 2px solid rgba(255,184,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      animation: spin-slow 8s linear infinite;
+    }
+
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* ── Text ─────────────────────────────────────────────────────── */
+    .mant-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      background: rgba(0,212,255,0.08);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 100px;
+      padding: 5px 14px;
+      margin-bottom: 24px;
+    }
+
+    .mant-eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      animation: blink 1.6s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
+    .mant-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--text-primary);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .mant-title span {
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .mant-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+
+    .mant-desc strong {
+      color: var(--text-primary);
+    }
+
+    /* ── Status bar ───────────────────────────────────────────────── */
+    .mant-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--accent-green);
+      font-weight: 600;
+      background: rgba(0,229,160,0.06);
+      border: 1px solid rgba(0,229,160,0.2);
+      border-radius: var(--radius-md);
+      padding: 10px 20px;
+      margin-bottom: 32px;
+    }
+
+    .mant-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      animation: blink 1.4s ease-in-out infinite;
+    }
+
+    /* ── Actions ──────────────────────────────────────────────────── */
+    .mant-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── Divider ──────────────────────────────────────────────────── */
+    .mant-divider {
+      margin: 36px 0 28px;
+      border: none;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .mant-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 480px) {
+      .mant-card { padding: 36px 24px; }
+      .mant-title { font-size: 26px; }
+      .mant-actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="particles" id="particles" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="Navegación principal">
+    <div class="nav-brand" role="button" tabindex="0" onclick="history.back()" aria-label="Volver atrás">
+      <div class="nav-logo" aria-hidden="true">🛡️</div>
+      <div class="nav-brand-text">
+        <div class="brand-name">Protect<span>A</span></div>
+        <div class="brand-sub">Escolar</div>
+      </div>
+    </div>
+    <ul class="nav-links" role="menubar">
+      <li><button class="nav-link" data-page="portada" role="menuitem">🏠 Inicio</button></li>
+      <li><button class="nav-link" data-page="perfil" role="menuitem">👤 Mi Perfil</button></li>
+      <li><button class="nav-link" data-page="asistente" role="menuitem">🤖 Asistente IA</button></li>
+      <li><button class="nav-link" data-page="canal" role="menuitem">🔒 Canal Seguro</button></li>
+      <li><button class="nav-link" data-page="recursos" role="menuitem">📚 Recursos</button></li>
+    </ul>
+    <div class="nav-sos">
+      <button class="btn btn-danger btn-sm" onclick="navigateTo('canal')"
+        aria-label="Solicitar ayuda urgente">🆘 Necesito Ayuda</button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="mant-wrapper" role="main">
+    <div class="glass-card mant-card animate-on-scroll">
+
+      <!-- Icon -->
+      <div class="mant-icon-wrap" aria-hidden="true">
+        <div class="mant-icon-ring">🔧</div>
+        <div class="mant-badge">⚙️</div>
+      </div>
+
+      <!-- Eyebrow -->
+      <div class="mant-eyebrow">
+        <div class="mant-eyebrow-dot"></div>
+        Aviso del sistema
+      </div>
+
+      <!-- Heading -->
+      <h1 class="mant-title" id="mant-heading">
+        Página en <span>Mantenimiento</span>
+      </h1>
+
+      <!-- Description -->
+      <p class="mant-desc">
+        Esta página está actualmente <strong>en mantenimiento</strong>.<br />
+        Nuestro equipo está trabajando para ofrecerte la mejor experiencia posible.
+        Por favor, vuelve a intentarlo más tarde.
+      </p>
+
+      <!-- Status -->
+      <div class="mant-status" role="status" aria-live="polite">
+        <div class="mant-status-dot"></div>
+        El resto del portal está operativo y disponible
+      </div>
+
+      <!-- Actions -->
+      <div class="mant-actions">
+        <button class="btn btn-primary" id="btn-mant-volver" onclick="history.back()"
+          aria-label="Volver a la página anterior">
+          ← Volver atrás
+        </button>
+        <button class="btn btn-ghost" id="btn-mant-inicio" onclick="navigateTo('portada')"
+          aria-label="Ir a la página de inicio">
+          🏠 Ir al Inicio
+        </button>
+      </div>
+
+      <hr class="mant-divider" />
+
+      <!-- Note -->
+      <p class="mant-note">
+        Si necesitas ayuda urgente, utiliza el <strong>🆘 Canal Seguro</strong> o habla con nuestro
+        <strong>🤖 Asistente IA</strong> — ambos están disponibles 24/7.
+      </p>
+
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script src="js/music.js"></script>
+</body>
+</html>

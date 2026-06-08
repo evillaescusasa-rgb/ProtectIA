@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProtectA Escolar — Selección de Perfil</title>
+  <meta name="description" content="Selecciona tu perfil en ProtectA Escolar para recibir recursos, orientación y apoyo adaptados a tus necesidades como estudiante, docente o familia." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* ── Profile Page Styles ──────────────────────────────────── */
+    .profile-page {
+      min-height: 100vh;
+      padding: 120px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-header {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 60px;
+      animation: fade-in-up 0.6s ease forwards;
+    }
+
+    .profile-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      max-width: 1000px;
+      margin: 0 auto 60px;
+    }
+
+    .profile-card {
+      padding: 40px 28px;
+      text-align: center;
+      cursor: pointer;
+      border-radius: var(--radius-xl);
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 2px solid var(--glass-border);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      animation: fade-in-up 0.6s ease forwards;
+    }
+
+    .profile-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 60%, rgba(45, 139, 255, 0.05));
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .profile-card:hover { transform: translateY(-8px); }
+    .profile-card:hover::before { opacity: 1; }
+
+    .profile-card.selected {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2), var(--glow-cyan);
+      background: rgba(0, 212, 255, 0.06);
+    }
+
+    .profile-card.card-student:hover,
+    .profile-card.card-student.selected {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 2px rgba(45, 139, 255, 0.2), var(--glow-blue);
+    }
+
+    .profile-card.card-teacher:hover,
+    .profile-card.card-teacher.selected {
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 0 2px rgba(123, 79, 255, 0.2), var(--glow-purple);
+    }
+
+    .profile-card.card-family:hover,
+    .profile-card.card-family.selected {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 0 2px rgba(0, 229, 160, 0.2), 0 0 20px rgba(0, 229, 160, 0.4);
+    }
+
+    .profile-avatar-wrap {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .profile-avatar-wrap.blue   { background: radial-gradient(circle, rgba(45,139,255,0.18), rgba(45,139,255,0.04)); border: 2px solid rgba(45,139,255,0.3); }
+    .profile-avatar-wrap.purple { background: radial-gradient(circle, rgba(123,79,255,0.18), rgba(123,79,255,0.04)); border: 2px solid rgba(123,79,255,0.3); }
+    .profile-avatar-wrap.green  { background: radial-gradient(circle, rgba(0,229,160,0.18), rgba(0,229,160,0.04)); border: 2px solid rgba(0,229,160,0.3); }
+
+    .profile-card:hover .profile-avatar-wrap { transform: scale(1.08); }
+
+    .profile-check {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 30px;
+      height: 30px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: var(--transition);
+      box-shadow: 0 0 12px rgba(0, 229, 160, 0.5);
+    }
+
+    .profile-card.selected .profile-check { opacity: 1; transform: scale(1); }
+
+    .profile-name {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: var(--text-primary);
+    }
+
+    .profile-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .profile-features {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    .profile-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .profile-feature .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-blue   { background: var(--accent-blue); }
+    .dot-purple { background: var(--accent-purple); }
+    .dot-green  { background: var(--accent-green); }
+
+    /* ── Profile Action Bar ──────────────────────────────────────── */
+    .profile-action-bar {
+      max-width: 1000px;
+      margin: 0 auto;
+      animation: fade-in-up 0.8s ease forwards;
+    }
+
+    .action-bar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 28px 36px;
+      flex-wrap: wrap;
+    }
+
+    .action-bar-info { flex: 1; }
+
+    .action-bar-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .action-bar-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .action-bar-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Adapt message panel ─────────────────────────────────────── */
+    .adapt-panel {
+      max-width: 1000px;
+      margin: 32px auto 0;
+      padding: 24px 32px;
+      display: none;
+    }
+
+    .adapt-panel.visible { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+
+    .adapt-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: rgba(0, 212, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .adapt-text-title {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 4px;
+      color: var(--accent-cyan);
+    }
+
+    .adapt-text-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 760px) {
+      .profile-selector-grid { grid-template-columns: 1fr; max-width: 400px; }
+      .action-bar-inner { flex-direction: column; align-items: stretch; }
+    }
+
+    /* ── Profile Popup Modal ─────────────────────────────────────── */
+    .profile-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 22, 0.80);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .profile-modal-overlay.open {
+      display: flex;
+      animation: modal-bg-in 0.25s ease forwards;
+    }
+
+    @keyframes modal-bg-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .profile-modal-box {
+      background: var(--bg-card);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-radius: var(--radius-xl);
+      padding: 48px 40px 36px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      animation: modal-pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes modal-pop-in {
+      from { opacity: 0; transform: scale(0.80) translateY(30px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .profile-modal-box.theme-blue   { border: 2px solid rgba(45,139,255,0.5);  box-shadow: 0 0 60px rgba(45,139,255,0.25),  0 24px 80px rgba(0,0,0,0.6); }
+    .profile-modal-box.theme-purple { border: 2px solid rgba(123,79,255,0.5); box-shadow: 0 0 60px rgba(123,79,255,0.25), 0 24px 80px rgba(0,0,0,0.6); }
+    .profile-modal-box.theme-green  { border: 2px solid rgba(0,229,160,0.5);  box-shadow: 0 0 60px rgba(0,229,160,0.25),  0 24px 80px rgba(0,0,0,0.6); }
+
+    .profile-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      color: var(--text-secondary);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .profile-modal-close:hover {
+      background: rgba(255,77,109,0.15);
+      border-color: rgba(255,77,109,0.4);
+      color: var(--accent-red);
+    }
+
+    .profile-modal-emoji {
+      font-size: 72px;
+      margin-bottom: 16px;
+      display: block;
+      animation: emoji-bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+    }
+
+    @keyframes emoji-bounce {
+      from { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0deg);     opacity: 1; }
+    }
+
+    .profile-modal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .badge-blue   { background: rgba(45,139,255,0.15);  color: var(--accent-cyan);   border: 1px solid rgba(0,212,255,0.3); }
+    .badge-purple { background: rgba(123,79,255,0.15); color: var(--accent-violet); border: 1px solid rgba(168,85,247,0.3); }
+    .badge-green  { background: rgba(0,229,160,0.15);  color: var(--accent-green);  border: 1px solid rgba(0,229,160,0.3); }
+
+    .profile-modal-title {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .profile-modal-sub {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .profile-modal-checkmark {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(0,229,160,0.15);
+      border: 2px solid rgba(0,229,160,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin: 0 auto 20px;
+      animation: check-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
+    }
+
+    @keyframes check-pop {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="particles" id="particles" aria-hidden="true"></div>
+
+  <nav class="navbar" role="navigation" aria-label="Navegación principal">
+    <div class="nav-brand" role="button" tabindex="0" aria-label="Ir a Portada">
+      <div class="nav-logo" aria-hidden="true">🛡️</div>
+      <div class="nav-brand-text">
+        <div class="brand-name">Protect<span>A</span></div>
+        <div class="brand-sub">Escolar</div>
+      </div>
+    </div>
+    <ul class="nav-links" role="menubar">
+      <li><button class="nav-link" data-page="portada" role="menuitem">🏠 Inicio</button></li>
+      <li><button class="nav-link active" data-page="perfil" role="menuitem">👤 Mi Perfil</button></li>
+      <li><button class="nav-link" data-page="asistente" role="menuitem">🤖 Asistente IA</button></li>
+      <li><button class="nav-link" data-page="canal" role="menuitem">🔒 Canal Seguro</button></li>
+      <li><button class="nav-link" data-page="recursos" role="menuitem">📚 Recursos</button></li>
+    </ul>
+    <div class="nav-sos">
+      <span class="nav-badge" id="nav-profile-badge" style="display:none;"></span>
+      <button class="btn btn-danger btn-sm" onclick="navigateTo('canal')" id="btn-sos-perfil">🆘 Necesito Ayuda</button>
+    </div>
+    <!-- Hamburger button (mobile) -->
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="nav-mobile-panel">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Nav Panel -->
+  <div class="nav-mobile-panel" id="nav-mobile-panel" role="navigation" aria-label="Menú móvil">
+    <button class="nav-link" data-page="portada">🏠 Inicio</button>
+    <button class="nav-link active" data-page="perfil">👤 Mi Perfil</button>
+    <button class="nav-link" data-page="asistente">🤖 Asistente IA</button>
+    <button class="nav-link" data-page="canal">🔒 Canal Seguro</button>
+    <button class="nav-link" data-page="recursos">📚 Recursos</button>
+    <div class="nav-mobile-sos">
+      <button class="btn btn-danger btn-sm" onclick="navigateTo('canal'); closeMobileMenu()" aria-label="Solicitar ayuda urgente">🆘 Necesito Ayuda</button>
+    </div>
+  </div>
+
+  <main class="profile-page page-wrapper" role="main">
+    <div class="profile-header">
+      <div class="section-label">Paso 1 de 2</div>
+      <h1 class="section-title">Selecciona tu <span>Perfil</span></h1>
+      <p class="section-subtitle" style="margin: 0 auto; text-align:center;">
+        La IA adapta el tono, los recursos y la experiencia según quién eres.<br/>
+        <em>La decisión final siempre corresponde a personas.</em>
+      </p>
+      <div class="accent-line"></div>
+    </div>
+
+    <!-- Profile Cards -->
+    <div class="profile-selector-grid" id="profile-grid" role="radiogroup" aria-label="Selección de perfil de usuario">
+
+      <div class="profile-card card-student" id="card-alumnado" role="radio" aria-checked="false" tabindex="0" data-profile="alumnado" onclick="selectProfile('alumnado')" onkeydown="if(event.key==='Enter'||event.key===' ')selectProfile('alumnado')">
+        <div class="profile-avatar-wrap blue" aria-hidden="true">
+          🎒
+          <div class="profile-check">✓</div>
+        </div>
+        <h2 class="profile-name">Alumnado</h2>
+        <p class="profile-desc">Eres estudiante y necesitas apoyo, orientación o quieres reportar algo.</p>
+        <div class="profile-features">
+          <div class="profile-feature"><div class="dot dot-blue"></div>Asistente IA empático</div>
+          <div class="profile-feature"><div class="dot dot-blue"></div>Canal seguro y anónimo</div>
+          <div class="profile-feature"><div class="dot dot-blue"></div>Guías de actuación</div>
+        </div>
+        <button class="btn btn-ghost btn-sm w-full" tabindex="-1" aria-hidden="true">Soy Estudiante</button>
+      </div>
+
+      <div class="profile-card card-teacher" id="card-profesorado" role="radio" aria-checked="false" tabindex="0" data-profile="profesorado" onclick="selectProfile('profesorado')" onkeydown="if(event.key==='Enter'||event.key===' ')selectProfile('profesorado')">
+        <div class="profile-avatar-wrap purple" aria-hidden="true">
+          👩‍🏫
+          <div class="profile-check">✓</div>
+        </div>
+        <h2 class="profile-name">Profesorado</h2>
+        <p class="profile-desc">Eres docente o profesional educativo y quieres gestionar situaciones.</p>
+        <div class="profile-features">
+          <div class="profile-feature"><div class="dot dot-purple"></div>Biblioteca de recursos</div>
+          <div class="profile-feature"><div class="dot dot-purple"></div>Protocolos de intervención</div>
+          <div class="profile-feature"><div class="dot dot-purple"></div>Alertas y prevención</div>
+        </div>
+        <button class="btn btn-ghost btn-sm w-full" tabindex="-1" aria-hidden="true">Soy Docente</button>
+      </div>
+
+      <div class="profile-card card-family" id="card-familias" role="radio" aria-checked="false" tabindex="0" data-profile="familias" onclick="selectProfile('familias')" onkeydown="if(event.key==='Enter'||event.key===' ')selectProfile('familias')">
+        <div class="profile-avatar-wrap green" aria-hidden="true">
+          👨‍👩‍👧
+          <div class="profile-check">✓</div>
+        </div>
+        <h2 class="profile-name">Familias</h2>
+        <p class="profile-desc">Eres padre, madre o tutor legal y quieres proteger o apoyar a tu hijo/a.</p>
+        <div class="profile-features">
+          <div class="profile-feature"><div class="dot dot-green"></div>Guías para el hogar</div>
+          <div class="profile-feature"><div class="dot dot-green"></div>Comunicación con el centro</div>
+          <div class="profile-feature"><div class="dot dot-green"></div>Recursos de apoyo emocional</div>
+        </div>
+        <button class="btn btn-ghost btn-sm w-full" tabindex="-1" aria-hidden="true">Soy Familiar</button>
+      </div>
+
+    </div>
+
+    <!-- Adapt Message Panel (appears on selection) -->
+    <div class="glass-card adapt-panel" id="adapt-panel" role="status" aria-live="polite">
+      <div class="adapt-icon" aria-hidden="true">✨</div>
+      <div>
+        <div class="adapt-text-title" id="adapt-title">Perfil seleccionado</div>
+        <div class="adapt-text-sub" id="adapt-sub">La IA adapta el tono, imágenes y recursos especialmente para ti.</div>
+      </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="profile-action-bar" id="action-bar" style="display:none; margin-top:32px;">
+      <div class="glass-card action-bar-inner">
+        <div class="action-bar-info">
+          <div class="action-bar-title" id="action-bar-title">¿Qué deseas hacer?</div>
+          <div class="action-bar-sub">Elige hacia dónde continuar con tu perfil seleccionado.</div>
+        </div>
+        <div class="action-bar-buttons">
+          <button class="btn btn-purple" id="btn-ir-asistente" onclick="navigateTo('asistente')" aria-label="Ir al asistente IA">🤖 Asistente IA</button>
+          <button class="btn btn-primary" id="btn-ir-recursos" onclick="navigateTo('recursos')" aria-label="Ver recursos y derivación">📚 Recursos</button>
+          <button class="btn btn-ghost" id="btn-ir-canal" onclick="navigateTo('canal')" aria-label="Ir al canal seguro">🔒 Canal Seguro</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider" style="max-width:1000px; margin:40px auto;"></div>
+
+    <!-- Back button -->
+    <div style="text-align:center; margin-bottom:60px;">
+      <button class="btn btn-ghost" id="btn-volver-portada" onclick="navigateTo('portada')" aria-label="Volver a la portada">← Volver a la Portada</button>
+    </div>
+  </main>
+
+  <!-- ── Profile Selected Popup Modal ──────────────────────────── -->
+  <div class="profile-modal-overlay" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle" onclick="handleProfileModalOverlay(event)">
+    <div class="profile-modal-box" id="profileModalBox">
+      <button class="profile-modal-close" id="btn-cerrar-perfil-modal" onclick="closeProfileModal()" aria-label="Cerrar">✕</button>
+      <span class="profile-modal-emoji" id="modal-emoji" aria-hidden="true">🎒</span>
+      <div class="profile-modal-checkmark" aria-hidden="true">✅</div>
+      <div class="profile-modal-badge" id="modal-badge">Perfil activado</div>
+      <div class="profile-modal-title" id="profileModalTitle">¡Perfil seleccionado!</div>
+      <p class="profile-modal-sub" id="modal-sub">La experiencia se ha adaptado para ti.</p>
+      <button class="btn btn-primary w-full" id="btn-aceptar-perfil" onclick="closeProfileModal()" aria-label="Aceptar y continuar">
+        ¡Entendido, continuar! →
+      </button>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/music.js"></script>
+  <script>
+    // ── Mobile hamburger menu
+    (function() {
+      const btn   = document.getElementById('nav-hamburger');
+      const panel = document.getElementById('nav-mobile-panel');
+      function closeMobileMenu() {
+        btn.classList.remove('open'); panel.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      window.closeMobileMenu = closeMobileMenu;
+      btn.addEventListener('click', () => {
+        const isOpen = panel.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+        btn.setAttribute('aria-expanded', isOpen);
+      });
+      panel.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          const page = link.getAttribute('data-page');
+          if (page) { closeMobileMenu(); navigateTo(page); }
+        });
+      });
+      document.addEventListener('click', (e) => {
+        if (!btn.contains(e.target) && !panel.contains(e.target)) closeMobileMenu();
+      });
+    })();
+  </script>
+  <script>
+    // ── Profile popup data ─────────────────────────────────────────
+    const PROFILE_DATA = {
+      alumnado: {
+        emoji:  '🎒',
+        badge:  'Alumnado',
+        badgeClass: 'badge-blue',
+        theme:  'theme-blue',
+        title:  '¡Hola, Estudiante!',
+        sub:    'Hemos configurado el portal para ti: tono empático, canal seguro y asistente siempre disponible. Puedes acceder a todos tus recursos desde el menú.'
+      },
+      profesorado: {
+        emoji:  '👩‍🏫',
+        badge:  'Profesorado',
+        badgeClass: 'badge-purple',
+        theme:  'theme-purple',
+        title:  '¡Hola, Docente!',
+        sub:    'Tienes acceso a protocolos de intervención, biblioteca de recursos y alertas tempranas. Tu experiencia ha sido adaptada para la gestión profesional.'
+      },
+      familias: {
+        emoji:  '👨‍👩‍👧',
+        badge:  'Familias',
+        badgeClass: 'badge-green',
+        theme:  'theme-green',
+        title:  '¡Hola, Familia!',
+        sub:    'Aquí tienes guías para el hogar, comunicación directa con el centro y apoyo emocional adaptado para acompañar a tu hijo/a.'
+      }
+    };
+
+    function selectProfile(profile) {
+      // Remove previous selection
+      document.querySelectorAll('.profile-card').forEach(c => {
+        c.classList.remove('selected');
+        c.setAttribute('aria-checked', 'false');
+      });
+
+      // Select new card
+      const card = document.getElementById('card-' + profile);
+      if (card) {
+        card.classList.add('selected');
+        card.setAttribute('aria-checked', 'true');
+      }
+
+      // Save state
+      ProtectaState.setProfile(profile);
+
+      // Show adapt panel (inline)
+      const panel = document.getElementById('adapt-panel');
+      const titleEl = document.getElementById('adapt-title');
+      const subEl   = document.getElementById('adapt-sub');
+      const data    = PROFILE_DATA[profile];
+
+      if (data) {
+        titleEl.textContent = data.title;
+        subEl.textContent   = data.sub;
+      }
+      panel.classList.add('visible');
+
+      // Show action bar
+      const bar = document.getElementById('action-bar');
+      bar.style.display = 'block';
+      bar.style.animation = 'fade-in-up 0.5s ease forwards';
+      document.getElementById('action-bar-title').textContent =
+        `${ProtectaState.getProfileLabel()} — ¿Qué deseas hacer?`;
+
+      // Update nav badge
+      const badge = document.getElementById('nav-profile-badge');
+      if (badge) {
+        badge.textContent = ProtectaState.getProfileLabel();
+        badge.style.display = 'inline-flex';
+      }
+
+      // ── Open popup modal ────────────────────────────────────────
+      openProfileModal(profile);
+    }
+
+    function openProfileModal(profile) {
+      const data = PROFILE_DATA[profile];
+      if (!data) return;
+
+      const box = document.getElementById('profileModalBox');
+
+      // Reset theme classes
+      box.classList.remove('theme-blue', 'theme-purple', 'theme-green');
+      box.classList.add(data.theme);
+
+      // Fill content
+      document.getElementById('modal-emoji').textContent = data.emoji;
+      document.getElementById('modal-badge').textContent = '✔ ' + data.badge + ' activado';
+      document.getElementById('modal-badge').className   = 'profile-modal-badge ' + data.badgeClass;
+      document.getElementById('profileModalTitle').textContent = data.title;
+      document.getElementById('modal-sub').textContent  = data.sub;
+
+      // Show overlay
+      const overlay = document.getElementById('profileModal');
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('btn-aceptar-perfil').focus();
+    }
+
+    function closeProfileModal() {
+      document.getElementById('profileModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function handleProfileModalOverlay(e) {
+      if (e.target === document.getElementById('profileModal')) closeProfileModal();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeProfileModal();
+    });
+
+    // Restore saved profile on load
+    document.addEventListener('DOMContentLoaded', () => {
+      const saved = ProtectaState.getProfile();
+      if (saved) selectProfile(saved);
+    });
+  </script>
+</body>
+</html>
