@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProtectA Escolar — Portal Inteligente Contra el Bullying</title>
+  <meta name="description"
+    content="ProtectA Escolar: portal seguro e inteligente para la prevención y apoyo ante situaciones de bullying escolar. Tecnología que escucha, comunidad que acompaña." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/portada.css" />
+</head>
+
+<body>
+  <!-- Particles -->
+  <div class="particles" id="particles" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="Navegación principal">
+    <div class="nav-brand" role="button" tabindex="0" aria-label="Ir a Portada">
+      <div class="nav-logo" aria-hidden="true">🛡️</div>
+      <div class="nav-brand-text">
+        <div class="brand-name">Protect<span>A</span></div>
+        <div class="brand-sub">Escolar</div>
+      </div>
+    </div>
+
+    <ul class="nav-links" role="menubar">
+      <li><button class="nav-link active" data-page="portada" role="menuitem">🏠 Inicio</button></li>
+      <li><button class="nav-link" data-page="perfil" role="menuitem">👤 Mi Perfil</button></li>
+      <li><button class="nav-link" data-page="asistente" role="menuitem">🤖 Asistente IA</button></li>
+      <li><button class="nav-link" data-page="canal" role="menuitem">🔒 Canal Seguro</button></li>
+      <li><button class="nav-link" data-page="recursos" role="menuitem">📚 Recursos</button></li>
+    </ul>
+
+    <div class="nav-sos">
+      <span class="nav-badge" id="nav-profile-badge" style="display:none;"></span>
+      <button class="btn btn-danger btn-sm" onclick="navigateTo('canal')" id="btn-sos-header"
+        aria-label="Solicitar ayuda urgente">🆘 Necesito Ayuda</button>
+    </div>
+
+    <!-- Hamburger button (mobile) -->
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="nav-mobile-panel">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Nav Panel -->
+  <div class="nav-mobile-panel" id="nav-mobile-panel" role="navigation" aria-label="Menú móvil">
+    <button class="nav-link active" data-page="portada">🏠 Inicio</button>
+    <button class="nav-link" data-page="perfil">👤 Mi Perfil</button>
+    <button class="nav-link" data-page="asistente">🤖 Asistente IA</button>
+    <button class="nav-link" data-page="canal">🔒 Canal Seguro</button>
+    <button class="nav-link" data-page="recursos">📚 Recursos</button>
+    <div class="nav-mobile-sos">
+      <button class="btn btn-danger btn-sm" onclick="navigateTo('canal'); closeMobileMenu()" aria-label="Solicitar ayuda urgente">🆘 Necesito Ayuda</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="page-wrapper">
+    <!-- Hero Section -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero-content">
+        <!-- Left: Text -->
+        <div class="hero-text">
+          <div class="hero-eyebrow">
+            <div class="hero-eyebrow-dot" aria-hidden="true"></div>
+            <span class="hero-tag">Portal Activo · Seguro · Confidencial</span>
+          </div>
+
+          <h1 class="hero-title" id="hero-heading">
+            Bienvenido a<br />
+            <em>ProtectA</em><br />
+            Escolar
+          </h1>
+
+          <p class="hero-description">
+            Un portal seguro para la <strong>prevención y el apoyo</strong> ante el bullying.
+            Aquí estamos para escucharte, guiarte y acompañarte.
+            <em>Tecnología que escucha. Comunidad que acompaña.</em>
+          </p>
+
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-lg" id="btn-entrar" onclick="navigateTo('perfil')"
+              aria-label="Entrar al portal seleccionando perfil">
+              🚀 Entrar al Portal
+            </button>
+            <button class="btn btn-ghost btn-lg" id="btn-ayuda-rapida" onclick="navigateTo('asistente')"
+              aria-label="Solicitar ayuda rápida con el asistente IA">
+              🤖 Ayuda Rápida
+            </button>
+          </div>
+
+          <div class="hero-stats" aria-label="Estadísticas de la plataforma">
+            <div class="stat-item">
+              <div class="stat-number">100%</div>
+              <div class="stat-label">Confidencial</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">24/7</div>
+              <div class="stat-label">Disponible</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">3+</div>
+              <div class="stat-label">Perfiles adaptados</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Visual -->
+        <div class="hero-visual">
+          <img src="IMAGENES PROYECTO/stop_bullying.png"
+            alt="Stop Bullying — Juntos creamos un entorno seguro para todos" class="hero-banner-img" id="hero-banner"
+            onerror="this.style.display='none'" />
+          <!-- Quick Help Float Card -->
+          <div class="hero-quick-help glass-card" id="quick-help-card" role="complementary" aria-label="Ayuda rápida">
+            <div class="qh-header">
+              <div class="qh-dot" aria-hidden="true"></div>
+              <span class="qh-title">Asistente IA Online</span>
+            </div>
+            <div class="qh-bubble" role="status">
+              💬 ¿Necesitas ayuda ahora? Estoy aquí para escucharte.
+            </div>
+            <button class="btn btn-primary btn-sm w-full" id="btn-solicitar-ayuda" onclick="navigateTo('asistente')"
+              aria-label="Solicitar ayuda rápida con asistente IA">
+              Solicitar Ayuda Rápida
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature Strip -->
+    <section class="feature-strip" aria-labelledby="features-heading">
+      <h2 class="sr-only" id="features-heading">Características principales</h2>
+      <div class="strip-grid">
+
+        <article class="glass-card strip-card animate-on-scroll" id="card-perfil" role="button" tabindex="0"
+          onclick="navigateTo('perfil')" aria-label="Ir a selección de perfil">
+          <div class="strip-icon strip-icon-blue" aria-hidden="true">👤</div>
+          <div class="strip-title">Selección de Perfil</div>
+          <div class="strip-desc">Personaliza tu experiencia como estudiante, docente o familia.</div>
+          <button class="btn btn-ghost btn-sm mt-4" tabindex="-1">Elegir Perfil →</button>
+        </article>
+
+        <article class="glass-card strip-card animate-on-scroll" id="card-asistente" role="button" tabindex="0"
+          onclick="navigateTo('asistente')" aria-label="Ir al asistente IA conversacional">
+          <div class="strip-icon strip-icon-purple" aria-hidden="true">🤖</div>
+          <div class="strip-title">Asistente IA</div>
+          <div class="strip-desc">Habla con nuestro asistente empático en cualquier momento.</div>
+          <button class="btn btn-ghost btn-sm mt-4" tabindex="-1">Iniciar Consulta →</button>
+        </article>
+
+        <article class="glass-card strip-card animate-on-scroll" id="card-canal" role="button" tabindex="0"
+          onclick="navigateTo('canal')" aria-label="Ir al canal seguro de reporte">
+          <div class="strip-icon strip-icon-cyan" aria-hidden="true">🔒</div>
+          <div class="strip-title">Canal Seguro</div>
+          <div class="strip-desc">Reporte anónimo y confidencial de incidencias de acoso.</div>
+          <button class="btn btn-ghost btn-sm mt-4" tabindex="-1">Enviar Reporte →</button>
+        </article>
+
+        <article class="glass-card strip-card animate-on-scroll" id="card-recursos" role="button" tabindex="0"
+          onclick="navigateTo('recursos')" aria-label="Ir a recursos y derivación">
+          <div class="strip-icon strip-icon-green" aria-hidden="true">📚</div>
+          <div class="strip-title">Recursos y Derivación</div>
+          <div class="strip-desc">Guías, protocolos y contacto directo con expertos.</div>
+          <button class="btn btn-ghost btn-sm mt-4" tabindex="-1">Ver Recursos →</button>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Principle Bar -->
+    <div style="padding: 0 24px 60px; position:relative; z-index:1;">
+      <div style="max-width:1200px; margin:0 auto;">
+        <div class="glass-card"
+          style="padding:20px 32px; display:flex; align-items:center; gap:16px; justify-content:center; flex-wrap:wrap; text-align:center;">
+          <span style="font-size:20px;" aria-hidden="true">🧭</span>
+          <p style="font-size:14px; color:var(--text-secondary); font-style:italic;">
+            <strong style="color:var(--accent-cyan);">Principio transversal:</strong>
+            La IA asiste y guía con empatía; la decisión final corresponde siempre a personas y protocolos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Screen-reader only class -->
+  <style>
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+  </style>
+
+  <!-- Site Footer -->
+  <footer role="contentinfo" style="
+    position: relative; z-index: 1;
+    padding: 20px 24px;
+    text-align: center;
+    border-top: 1px solid var(--glass-border);
+    background: rgba(6,13,31,0.6);
+    backdrop-filter: blur(12px);
+  ">
+    <p style="font-size: 12px; color: var(--text-muted); line-height: 1.8;">
+      🛡️ <strong style="color: var(--text-secondary);">ProtectA Escolar</strong> —
+      Portal seguro de prevención y apoyo frente al bullying.
+      <span style="margin: 0 8px;">·</span>
+      <a href="privacidad.html" style="color: var(--accent-cyan); text-decoration: underline;"
+        aria-label="Ver política de privacidad y protección de datos">
+        🔐 Privacidad y Protección de Datos
+      </a>
+      <span style="margin: 0 8px;">·</span>
+      <span>La IA asiste; las personas deciden.</span>
+    </p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/music.js"></script>
+  <script>
+    // ── Mobile hamburger menu ─────────────────────────────────────
+    (function() {
+      const btn   = document.getElementById('nav-hamburger');
+      const panel = document.getElementById('nav-mobile-panel');
+      function closeMobileMenu() {
+        btn.classList.remove('open');
+        panel.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      window.closeMobileMenu = closeMobileMenu;
+      btn.addEventListener('click', () => {
+        const isOpen = panel.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+        btn.setAttribute('aria-expanded', isOpen);
+      });
+      panel.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          const page = link.getAttribute('data-page');
+          if (page) { closeMobileMenu(); navigateTo(page); }
+        });
+      });
+      document.addEventListener('click', (e) => {
+        if (!btn.contains(e.target) && !panel.contains(e.target)) closeMobileMenu();
+      });
+    })();
+  </script>
+</body>
+</html>
